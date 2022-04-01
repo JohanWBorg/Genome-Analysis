@@ -4,7 +4,7 @@
 #SBATCH -M snowy
 #SBATCH -p core
 #SBATCH -n 2
-#SBATCH -t 04:00:
+#SBATCH -t 04:00:00
 #SBATCH -J trimming_l_ferriphilum_04_01
 #SBATCH -o trimming_04_01.output
 #SBATCH -e trimming_04_01.output
@@ -13,32 +13,25 @@
 
 # Load module
 module load bioinfo-tools
-module load trimmomatic
+module load trimmomatic/0.36
 
-code_path = "/home/jobo2160/genome_analysis/Genome-Analysis/code/4_read_trimming/"
-data_path = "/home/jobo2160/genome_analysis/Genome-Analysis/data/raw/RNA/*"
-adapter_path = "/home/jobo2160/genome_analysis/Genome-Analysis/data/adapter/TruSeq3-PE.fa"
+code_path="/home/jobo2160/genome_analysis/Genome-Analysis/code/4_read_trimming/"
+data_path="/home/jobo2160/genome_analysis/Genome-Analysis/data/raw/RNA/"
+adapter_path="$TRIMMOMATIC_HOME/adapters/TruSeq2-PE.fa"
 
-for filename in $data_path; do
+for filename in $data_path*; do
 
-if $filename == *"_1"*; then
+if [[ "$filename" == *"_1"* ]]; then
 
-forward_file = $filename
-reverse_file = ${$filename/_1/_2}
+forward_file=$filename	
+reverse_file=${filename/_1/_2}
 
-sample_name = ${$filename/$data_path/}
-sample_name = ${$sample_name/_1/}
+sample_file=${filename/$data_path/}
+sample_name=${sample_file/_1*/}
 
-
-trimmomatic PE -threads 2 \
--summary $code_path"summary/$sample_name \
-$forward_file \
-$reverse_file \
-"out_P_"$forward_file \
-"out_U_"$forward_file \ 
-"out_P_"$reverse_file \
-"out_U_"$reverse_file \
-ILLUMINACLIP:$adapter_path \
+trimmomatic PE -phred33 $forward_file $reverse_file \
+"${code_path}"results/"${sample_file/_1/_1P}" "${code_path}"results/"${sample_file/_1/_1U}" "${code_path}"results/"${sample_file/_1/_2P}" "${code_path}"results/"${sample_file/_1/_2U}" \
+ILLUMINACLIP:$adapter_path:2:30:10 \
 SLIDINGWINDOW:4:15
 
 fi
