@@ -5,9 +5,9 @@
 #SBATCH -p core
 #SBATCH -n 4
 #SBATCH -t 08:00:00
-#SBATCH -J bwa_mapping_08_04
-#SBATCH -o bwa_output_08_04.output
-#SBATCH -e bwa_output_08_04.output
+#SBATCH -J bwa_mapping_09_04
+#SBATCH -o bwa_output_09_04.output
+#SBATCH -e bwa_output_09_04.output
 #SBATCH --mail-user johan.borg.2160@student.uu.se
 #SBATCH --mail-type=END,FAIL
 
@@ -30,7 +30,7 @@ file_id=${filename/$data_path/}
 file_id=${file_id/.fastq.gz/}
 
 bwa index $genome_path
-bwa mem -t 4 $genome_path $left_read $right_read | samtools -o $output/${file_id}.bam
+bwa mem -t 4 $genome_path $left_read $right_read | samtools sort -@ 4 -o $output/${file_id}.bam
 
 fi
 done
