@@ -10,22 +10,23 @@
 #SBATCH -e read_counting.output
 #SBATCH --mail-user johan.borg.2160@student.uu.se
 #SBATCH --mail-type=END,FAIL
+#SBATCH --reservation=uppmax2022-2-5_6
 
 # Load modules
 module load bioinfo-tools htseq samtools
 
 # Define paths to different files
-bam_files="/home/jobo2160/genome_analysis/Genome-Analysis/code/6_read_mapping/results/*"
+bam_files="/home/jobo2160/genome_analysis/Genome-Analysis/code/6_read_mapping/results/*.bam"
 bai_files="/home/jobo2160/genome_analysis/Genome-Analysis/code/6_read_mapping/results/*.bai"
-gff_file="/home/jobo2160/genome_analysis/Genome-Analysis/code/3_genome_annotation/prokka/PROKKA_04052022.gff"
+gff_file="/home/jobo2160/genome_analysis/Genome-Analysis/code/7_read_counting/PROKKA_04052022_clean.gff"
 out="/home/jobo2160/genome_analysis/Genome-Analysis/code/7_read_counting/results/htseq_result.txt"
 
 # Create index for bam files
-for filename in $bam_files; do
-samtools index $filename $filename.bai
-done
+# for filename in $bam_files; do
+# samtools index $filename ${filename/.bam/.bai}
+# done
 
 # Run HtSeq for all
-htseq-count -r pos -i gene_name -f bam $bai_files $gff_file > $out
+htseq-count -r pos -i ID -s no -t CDS  -f bam $bam_files $gff_file > $out
 
 exit 0
