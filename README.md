@@ -1,1 +1,3 @@
 # Genome-Analysis
+
+This is my repository for my work replicating the results from the article "Multi-omics Reveals the Lifestyle of the Acidophilic, Mineral- Oxidizing Model Species Leptospirillum ferriphilum" (paper number 2) in the course Genome Analysis at Uppsala University. In this repository, the scripts used in order to perform a de novo genome assembly as well as differential expression analysis can be found. For some of the steps in the workflow, there is also uplaoded results for the analysis. All the steps taken can be found in a separate folder withing the "Code" folder. Within those subfolders there might be a folder containing (a part of) the result of that step.
